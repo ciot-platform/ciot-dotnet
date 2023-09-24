@@ -1,7 +1,4 @@
 ﻿using CiotNetNS.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CiotNetNS.Shared
 {
@@ -10,6 +7,10 @@ namespace CiotNetNS.Shared
         public ErrorCode ErrorCode { get; set; }
 
         public string Message { get; set; }
+
+        public bool OK => ErrorCode == ErrorCode.Success;
+
+        public bool Error => ErrorCode != ErrorCode.Success;
 
         public Result(ErrorCode errorCode, string message)
         {
