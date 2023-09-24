@@ -1,13 +1,12 @@
-﻿using CiotNet.Serializer.Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CiotNet.Serializer.Domain.Interfaces
 {
-    public interface ISerializer <TSerializationType>
+    public interface ISerializer
     {
-        TSerializationType Serialize(object data);
-        T Deserialize<T>(TSerializationType data, int offset = 0);
+        byte[] Serialize<T>(T data);
+        T Deserialize<T>(byte[] data, int offset = 0);
     }
 }
