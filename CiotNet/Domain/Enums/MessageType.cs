@@ -3,6 +3,6 @@
     public enum MessageType
     {
         Unknown,
-        GetDeviceInfo,
+        DeviceInfo,
     }
 }
