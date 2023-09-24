@@ -20,4 +20,8 @@
     <ProjectReference Include="..\CiotNet\CiotNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
 </Project>
