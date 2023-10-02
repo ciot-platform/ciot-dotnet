@@ -8,7 +8,19 @@ namespace CiotNetNS.Domain.Enums
     {
         Fail = -1,
         Success,
+        IncorrectState,
+        SerializationError,
+        DeserializationError,
+        SendDataError,
+        ReceiveDataError,
+        BufferOverflow,
+        IncorrectSize,
+        SerialPortClosed,
         NotFound,
         ValidationFailed,
+        ConnectError,
+        DisconnectError,
+        Exception,
+        TerminatorMissing
     }
 }

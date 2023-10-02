@@ -3,10 +3,8 @@
     public enum ConnectionType
     {
         Unknown = 0,
-        Usb,
-        Ble,
-        Wifi,
-        Ethernet,
+        Serial,
+        Hid,
         Max
     }
 }

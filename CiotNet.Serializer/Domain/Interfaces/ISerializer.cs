@@ -8,5 +8,6 @@ namespace CiotNet.Serializer.Domain.Interfaces
     {
         byte[] Serialize<T>(T data);
         T Deserialize<T>(byte[] data, int offset = 0);
+        int SizeOf<T>(T data);
     }
 }

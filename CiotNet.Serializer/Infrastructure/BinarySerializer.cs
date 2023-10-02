@@ -42,6 +42,11 @@ namespace CiotNet.Serializer.Infrastructure
             return bytes.ToArray();
         }
 
+        public int SizeOf<T>(T data)
+        {
+            return Serialize(data).Length;
+        }
+
         private byte[] SerializeValue(Type type, dynamic value, PropertyInfo prop = null)
         {
             if (type.IsEnum || type == typeof(byte))

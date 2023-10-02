@@ -4,17 +4,17 @@ namespace CiotNetNS.Shared
 {
     public class Result
     {
-        public ErrorCode ErrorCode { get; set; }
+        public ErrorCode Error { get; set; }
 
         public string Message { get; set; }
 
-        public bool OK => ErrorCode == ErrorCode.Success;
+        public bool Ok => Error == ErrorCode.Success;
 
-        public bool Error => ErrorCode != ErrorCode.Success;
+        public bool Failed => Error != ErrorCode.Success;
 
         public Result(ErrorCode errorCode, string message)
         {
-            ErrorCode = errorCode;
+            Error = errorCode;
             Message = message;
         }
 
