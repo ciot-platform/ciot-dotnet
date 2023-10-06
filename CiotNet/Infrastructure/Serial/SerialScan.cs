@@ -42,15 +42,15 @@ namespace CiotNetNS.Infrastructure.Serial
 
             foreach (var port in ports)
             {
-                serial.Close();
-                serial.Port = port;
                 try
                 {
-                    serial.Open();
-                    protocol.SendMessage(connMsg);
-
                     var cancellationTokenSource = new CancellationTokenSource(timeout);
                     var task = WaitForProtocolMessageAsync(cancellationTokenSource.Token);
+
+                    serial.Close();
+                    serial.Port = port;
+                    serial.Open();
+                    protocol.SendMessage(connMsg);
 
                     if (await Task.WhenAny(task, Task.Delay(timeout, cancellationTokenSource.Token)) == task)
                     {
