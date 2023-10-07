@@ -28,7 +28,6 @@ namespace CiotNetNS.Infrastructure.Serial
 
         private const byte startChar = (byte)'{';
         private const byte endChar = (byte)'}';
-
         private const int sizeByte1Idx = 1;
         private const int sizeByte2Idx = 2;
         private const int headerSize = 3;
@@ -37,11 +36,11 @@ namespace CiotNetNS.Infrastructure.Serial
 
         private readonly byte[] buffer;
         private short size = 0;
-        private int idx = 0;
+        private short idx = 0;
 
         private MessageStatus Status { get => status; set => status = value; }
 
-        public SerialProtocol(IConnection connection, ISerializer serializer, int size = 4095)
+        public SerialProtocol(IConnection connection, ISerializer serializer, int size = 1023)
         {
             this.connection = connection;
             this.serializer = serializer;
