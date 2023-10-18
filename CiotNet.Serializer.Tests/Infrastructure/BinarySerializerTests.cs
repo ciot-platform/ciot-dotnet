@@ -11,6 +11,8 @@ namespace CiotNet.Serializer.Tests.Infrastructure
             var serializer = new BinarySerializer();
             var message = serializer.Deserialize<Message>(Message.MockRaw);
 
+            //Message.Mock.UnionData.SetSerializer(serializer);
+
             Assert.Multiple(() =>
             {
                 Assert.That(message.State, Is.EqualTo(Message.Mock.State));
@@ -33,6 +35,18 @@ namespace CiotNet.Serializer.Tests.Infrastructure
                 Assert.That(message.Child.Name, Is.EqualTo(Message.Mock.Child.Name));
                 Assert.That(message.LastNumber, Is.EqualTo(Message.Mock.LastNumber));
                 Assert.IsTrue(message.Bytes.SequenceEqual(Message.Mock.Bytes));
+                //Assert.IsTrue(message.ChildSerializable.Data.SequenceEqual(Message.Mock.ChildSerializable.Data));
+                //Assert.That(message.ChildSerializable.FloatNum, Is.EqualTo(Message.Mock.ChildSerializable.FloatNum));
+                //Assert.That(message.UnionData.Bytes.Byte1, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte1));
+                //Assert.That(message.UnionData.Bytes.Byte2, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte2));
+                //Assert.That(message.UnionData.Bytes.Byte3, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte3));
+                //Assert.That(message.UnionData.Bytes.Byte4, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte4));
+                //Assert.That(message.UnionData.Bytes.Byte5, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte5));
+                //Assert.That(message.UnionData.Bytes.Byte6, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte6));
+                //Assert.That(message.UnionData.Bytes.Byte7, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte7));
+                //Assert.That(message.UnionData.Bytes.Byte8, Is.EqualTo(Message.Mock.UnionData.Bytes.Byte8));
+                //Assert.That(message.UnionData.Numbers.Number1, Is.EqualTo(Message.Mock.UnionData.Numbers.Number1));
+                //Assert.That(message.UnionData.Numbers.Number2, Is.EqualTo(Message.Mock.UnionData.Numbers.Number2));
             });
         }
 

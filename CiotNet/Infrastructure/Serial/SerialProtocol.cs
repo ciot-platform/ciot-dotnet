@@ -31,8 +31,10 @@ namespace CiotNetNS.Infrastructure.Serial
         private const int sizeByte1Idx = 1;
         private const int sizeByte2Idx = 2;
         private const int headerSize = 3;
-        private const int msgInterfaceIdx = 3;
-        private const int msgTypeIdx = 4;
+        //private const int msgTypeIdx = 3;
+        //private const int msgInterfaceTypeIdx = 4;
+        //private const int msgInterfaceIdIdx = 5;
+        //private const int msgErrorIdx = 6;
 
         private readonly byte[] buffer;
         private short size = 0;
@@ -128,11 +130,12 @@ namespace CiotNetNS.Infrastructure.Serial
                     {
                         if (idx - headerSize == size)
                         {
-                            byte[] msg = new byte[size];
-                            var @interface = (InterfaceType)buffer[msgInterfaceIdx];
-                            var type = (MessageType)buffer[msgTypeIdx];
-                            Array.Copy(buffer, msgInterfaceIdx, msg, 0, msg.Length);
-                            var data = new MessageDto(@interface, type, msg);
+                            //byte[] msg = new byte[size];
+                            //var @interface = (InterfaceType)buffer[msgInterfaceTypeIdx];
+                            //var type = (MessageType)buffer[msgTypeIdx];
+                            //Array.Copy(buffer, msgInterfaceTypeIdx, msg, 0, msg.Length);
+                            //var data = new MessageDto(type, @interface, msg);
+                            var data = MessageDto.Deserialize(serializer, buffer, headerSize);
                             OnMessage?.Invoke(this, data);
                             Status = MessageStatus.Done;
                         }
@@ -140,7 +143,7 @@ namespace CiotNetNS.Infrastructure.Serial
                         {
                             idx = 0;
                             Status = MessageStatus.WaitStartData;
-                            return Result.Failure(ErrorCode.IncorrectSize, Messages.IncorrectSize);
+                            return Result.Failure(ErrorCode.InvalidSize, Messages.IncorrectSize);
                         }
                     }
                     if (idx == len - 1)

@@ -1,60 +1,30 @@
-﻿
-using CiotNet.Serializer.Domain.Interfaces;
-using CiotNetNS.Application.DTOs.System;
+﻿using CiotNet.Serializer.Domain.Interfaces;
+using CiotNet.Serializer.Infrastructure;
 using CiotNetNS.Domain.Enums;
 
 namespace CiotNetNS.Application.DTOs
 {
     public class MessageDto
     {
-        public InterfaceType Interface { get; set; }
-
         public MessageType Type { get; set; }
 
-        public object Data { get; set; }
+        public InterfaceInfoDto Interface { get; set; }
 
-        public MessageDto(InterfaceType @interface = InterfaceType.Unknown, MessageType type = MessageType.Unknown, object data = null)
+        public ErrorCode Error { get; set; }
+
+        public Union Data { get; set; }
+
+        public MessageDto(MessageType messageType = MessageType.Unknown, InterfaceType interfaceType = InterfaceType.Unknown, byte interfaceId = 0, Union data = null)
         {
-            Interface = @interface;
-            Type = type;
+            Type = messageType;
+            Interface = new InterfaceInfoDto(interfaceType, interfaceId);
+            Error = ErrorCode.Ok;
             Data = data;
         }
 
-        public MessageDto(InterfaceType @interface, MessageType type, byte[] data, ISerializer serializer)
+        public static MessageDto Deserialize(ISerializer serializer, byte[] data, int offset = 0)
         {
-            Interface = @interface;
-            Type = type;
-
-            switch (@interface)
-            {
-                case InterfaceType.Unknown:
-                    Data = null;
-                    break;
-                case InterfaceType.System:
-                    Data = SystemSerialize(type, data, serializer);
-                    break;
-            }
-        }
-
-        object SystemSerialize(MessageType type, byte[] data, ISerializer serializer)
-        {
-            switch (type)
-            {
-                case MessageType.Unknown:
-                    return null;
-                case MessageType.Start:
-                    return null;
-                case MessageType.Stop:
-                    return null;
-                case MessageType.GetConfig:
-                    return null;
-                case MessageType.GetStatus:
-                    return serializer.Deserialize<SystemStatusDto>(data);
-                case MessageType.Request:
-                    return serializer.Deserialize<SystemRequestDto>(data);
-
-            }
-            return null;
+            return serializer.Deserialize<MessageDto>(data, offset);
         }
     }
 }

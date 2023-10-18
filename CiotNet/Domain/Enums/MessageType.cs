@@ -12,5 +12,6 @@ namespace CiotNetNS.Domain.Enums
         GetConfig,
         GetStatus,
         Request,
+        Event
     }
 }

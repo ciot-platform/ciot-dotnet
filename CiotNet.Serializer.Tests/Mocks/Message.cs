@@ -31,9 +31,13 @@ namespace CiotNet.Serializer.Tests.Mocks
         public int LastNumber { get; set; }
 
         [Size(6)]
-        public byte[] Bytes { get; set; } = { };
+        public byte[] Bytes { get; set; } = Array.Empty<byte>();
 
-        public static Message Mock = new Message()
+        //public MessageSerializable ChildSerializable { get; set; } = new MessageSerializable();
+
+        //public MessageUnion UnionData { get; set; } = new MessageUnion();
+
+        public static readonly Message Mock = new()
         {
             State = MessageState.Sended,
             Id = 0x01,
@@ -57,10 +61,16 @@ namespace CiotNet.Serializer.Tests.Mocks
                 Name = "name",
             },
             LastNumber = 0x24233434,
-            Bytes = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 }
+            Bytes = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 },
+            //ChildSerializable = new MessageSerializable()
+            //{
+            //    Data = new byte[] { 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80 },
+            //    FloatNum = 10.22f
+            //}
+            //UnionData = new MessageUnion(new byte[] { 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80 })
         };
 
-        public static byte[] MockRaw = new byte[]
+        public static readonly byte[] MockRaw = new byte[]
         {
             0x02, // State
             0x01, // Id
@@ -82,6 +92,9 @@ namespace CiotNet.Serializer.Tests.Mocks
             (byte)'n', (byte)'a', (byte)'m', (byte)'e', (byte)'\0', // Child.Name
             0x34, 0x34, 0x23, 0x24, // LastNumber
             0x01, 0x02, 0x03, 0x04, 0x05, 0x06, // Bytes
+            //0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, // ChildSerializable.Data
+            //0x1f, 0x85, 0x23, 0x41, // ChildSerializable.FloatNum
+            0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80 // MessageUnion.RawData
         };
     }
 }

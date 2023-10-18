@@ -9,12 +9,8 @@ namespace CiotNetNS.Domain.Enums
         Unknown,
         System,
         Serial,
-        Hid,
-        Ble,
-        Ethernet,
-        Wifi,
-        Ntp = 32,
-        Mqtt,
-        Ota
+        HttpClient,
+        HttpServer,
+        MqttClient,
     }
 }

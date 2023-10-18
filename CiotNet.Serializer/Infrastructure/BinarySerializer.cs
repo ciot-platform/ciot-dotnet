@@ -71,6 +71,17 @@ namespace CiotNet.Serializer.Infrastructure
                 }
                 return bytes.ToArray();
             }
+            //else if (type == typeof(ISerializable))
+            //{
+            //    ISerializable serializable = (ISerializable)value;
+            //    return serializable.Serialize(this);
+            //}
+            else if (typeof(IUnion).IsAssignableFrom(type))
+            {
+                var obj = value as IUnion;
+                obj.SetSerializer(this);
+                return obj.GetData();
+            }
             else if (type.IsClass)
             {
                 return Serialize(value);
@@ -158,6 +169,23 @@ namespace CiotNet.Serializer.Infrastructure
                 }
                 idx++;
                 return text;
+            }
+
+            //if (type == typeof(ISerializable))
+            //{
+            //    var obj = Activator.CreateInstance(type) as ISerializable;
+            //    return obj.Deserialize(this, data, idx);
+            //}
+
+            if (typeof(IUnion).IsAssignableFrom(type))
+            {
+                var obj = Activator.CreateInstance(type) as IUnion;
+                var array = new byte[data.Length - idx];
+                Array.Copy(data, idx, array, 0, data.Length - idx);
+                obj.SetData(array);
+                idx += obj.GetData().Length;
+                obj.SetSerializer(this);
+                return obj;
             }
 
             if (type.IsArray)

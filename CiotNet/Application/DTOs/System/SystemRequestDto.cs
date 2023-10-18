@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CiotNet.Serializer.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,6 @@ namespace CiotNetNS.Application.DTOs.System
     {
         Unknown,
         Restart,
-        FactoryReset,
     }
 
     public class SystemRequestDto

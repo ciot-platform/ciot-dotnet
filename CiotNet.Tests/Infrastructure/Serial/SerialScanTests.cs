@@ -9,9 +9,9 @@ namespace CiotNet.Tests.Infrastructure.Serial
 {
     internal class SerialScanTests
     {
-        Mock<IProtocol> protocolMock = new();
-        Mock<ISerialWrapper> serialMock = new();
-        SerialScan scanner;
+        private readonly Mock<IProtocol> protocolMock = new();
+        private readonly Mock<ISerialWrapper> serialMock = new();
+        private SerialScan scanner;
 
         [SetUp]
         public void SetUp()
@@ -24,7 +24,7 @@ namespace CiotNet.Tests.Infrastructure.Serial
         {
             var callbackExecuted = false;
             var callbackCompleted = new ManualResetEvent(false);
-            var expectedMessage = new MessageDto(InterfaceType.System, MessageType.GetStatus);
+            var expectedMessage = new MessageDto(MessageType.GetStatus, InterfaceType.System);
             var args = new object[] { protocolMock.Object, expectedMessage }; 
             var port = "";
 
@@ -56,8 +56,11 @@ namespace CiotNet.Tests.Infrastructure.Serial
             if (callbackExecuted)
             {
                 var result = await resultAsync;
-                Assert.That(result.Ok, Is.True);
-                Assert.That(port, Is.EqualTo("COM2"));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result.Ok, Is.True);
+                    Assert.That(port, Is.EqualTo("COM2"));
+                });
             }
             else
             {
@@ -70,7 +73,7 @@ namespace CiotNet.Tests.Infrastructure.Serial
         {
             var callbackExecuted = false;
             var callbackCompleted = new ManualResetEvent(false);
-            var expectedMessage = new MessageDto(InterfaceType.System, MessageType.GetStatus);
+            var expectedMessage = new MessageDto(MessageType.GetStatus, InterfaceType.System);
             var args = new object[] { protocolMock.Object, expectedMessage };
             var port = "";
 

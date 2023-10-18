@@ -8,9 +8,9 @@ namespace CiotNetNS.Shared
 
         public string Message { get; set; }
 
-        public bool Ok => Error == ErrorCode.Success;
+        public bool Ok => Error == ErrorCode.Ok;
 
-        public bool Failed => Error != ErrorCode.Success;
+        public bool Failed => Error != ErrorCode.Ok;
 
         public Result(ErrorCode errorCode, string message)
         {
@@ -20,7 +20,7 @@ namespace CiotNetNS.Shared
 
         public static Result Success()
         {
-            return new Result(ErrorCode.Success, string.Empty);
+            return new Result(ErrorCode.Ok, string.Empty);
         }
 
         public static Result Failure(ErrorCode errorCode = ErrorCode.Fail, string message = "")

@@ -29,16 +29,16 @@ namespace CiotNetNS.Infrastructure.Serial
 
         private void Protocol_OnMessage(object sender, MessageDto e)
         {
-            if (e != null && e.Interface == InterfaceType.System && e.Type == MessageType.GetStatus)
+            if (e != null && e.Interface.Type == InterfaceType.System && e.Type == MessageType.GetStatus)
             {
-                OnConnection?.Invoke(this, e.Data as SystemStatusDto);
+                OnConnection?.Invoke(this, e.Data.Get<SystemStatusDto>());
             }
         }
 
         public async Task<Result> Scan()
         {
             var ports = serial.GetPorts();
-            var connMsg = new MessageDto(InterfaceType.System, MessageType.GetStatus);
+            var connMsg = new MessageDto(MessageType.GetStatus, InterfaceType.System);
 
             foreach (var port in ports)
             {

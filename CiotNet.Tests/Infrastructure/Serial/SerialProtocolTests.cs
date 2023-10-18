@@ -1,4 +1,5 @@
 ﻿using CiotNet.Serializer.Domain.Interfaces;
+using CiotNet.Serializer.Infrastructure;
 using CiotNet.Tests.Mocks;
 using CiotNetNS.Application.DTOs;
 using CiotNetNS.Domain.Enums;
@@ -12,20 +13,21 @@ namespace CiotNet.Tests.Infrastructure.Serial
     public class SerialProtocolTests
     {
         readonly Mock<IConnection> connectionMock = new();
-        readonly Mock<ISerializer> serializerMock = new();
+        readonly BinarySerializer serializerMock = new();
+        //readonly Mock<ISerializer> serializerMock = new();
         SerialProtocol protocol;
 
         [SetUp]
         public void SetUp()
         {
-            protocol = new SerialProtocol(connectionMock.Object, serializerMock.Object);
+            protocol = new SerialProtocol(connectionMock.Object, serializerMock);
         }
 
         [Test]
         public void TestSendMessageSucess()
         {
             var bytesSended = new List<byte>();
-            serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Returns(MessageDtoMocks.MockData);
+            //serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Returns(MessageDtoMocks.MockData);
             connectionMock.Setup(e => e.SendData(It.IsAny<byte[]>())).Callback<byte[]>(data =>
             {
                 bytesSended.AddRange(data);
@@ -34,11 +36,12 @@ namespace CiotNet.Tests.Infrastructure.Serial
             Assert.Multiple(() =>
             {
                 Assert.That(bytesSended[0], Is.EqualTo((byte)'{'));
-                Assert.That(bytesSended[1], Is.EqualTo(0x02));
+                Assert.That(bytesSended[1], Is.EqualTo(0x03));
                 Assert.That(bytesSended[2], Is.EqualTo(0x00));
-                Assert.That(bytesSended[3], Is.EqualTo(0x01));
-                Assert.That(bytesSended[4], Is.EqualTo(0x04));
-                Assert.That(bytesSended[5], Is.EqualTo((byte)'}'));
+                Assert.That(bytesSended[3], Is.EqualTo(0x04));
+                Assert.That(bytesSended[4], Is.EqualTo(0x01));
+                Assert.That(bytesSended[5], Is.EqualTo(0x00));
+                Assert.That(bytesSended[6], Is.EqualTo((byte)'}'));
                 Assert.That(result.Ok, Is.EqualTo(true));
             });
         }
@@ -47,7 +50,7 @@ namespace CiotNet.Tests.Infrastructure.Serial
         public void TestSendMessageSerializationException()
         {
             var bytesSended = new List<byte>();
-            serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Throws(new InvalidOperationException());
+            //serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Throws(new InvalidOperationException());
             var result = protocol.SendMessage(MessageDtoMocks.Mock);
             Assert.Multiple(() =>
             {
@@ -60,7 +63,7 @@ namespace CiotNet.Tests.Infrastructure.Serial
         public void TestSendMessageSendDataError()
         {
             var bytesSended = new List<byte>();
-            serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Returns(MessageDtoMocks.MockData);
+            //serializerMock.Setup(e => e.Serialize(MessageDtoMocks.Mock)).Returns(MessageDtoMocks.MockData);
             connectionMock.Setup(e => e.SendData(It.IsAny<byte[]>())).Throws(new InvalidOperationException());
             var result = protocol.SendMessage(MessageDtoMocks.Mock);
             Assert.Multiple(() =>
@@ -92,8 +95,11 @@ namespace CiotNet.Tests.Infrastructure.Serial
 
             if (callbackExecuted)
             {
-                Assert.That(result?.Failed, Is.True);
-                Assert.That(result?.Error, Is.EqualTo(ErrorCode.BufferOverflow));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result?.Failed, Is.True);
+                    Assert.That(result?.Error, Is.EqualTo(ErrorCode.BufferOverflow));
+                });
             }
             else
             {
@@ -123,8 +129,11 @@ namespace CiotNet.Tests.Infrastructure.Serial
 
             if (callbackExecuted)
             {
-                Assert.That(result?.Failed, Is.True);
-                Assert.That(result?.Error, Is.EqualTo(ErrorCode.IncorrectSize));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result?.Failed, Is.True);
+                    Assert.That(result?.Error, Is.EqualTo(ErrorCode.InvalidSize));
+                });
             }
             else
             {
@@ -154,8 +163,11 @@ namespace CiotNet.Tests.Infrastructure.Serial
 
             if (callbackExecuted)
             {
-                Assert.That(result?.Failed, Is.True);
-                Assert.That(result?.Error, Is.EqualTo(ErrorCode.TerminatorMissing));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result?.Failed, Is.True);
+                    Assert.That(result?.Error, Is.EqualTo(ErrorCode.TerminatorMissing));
+                });
             }
             else
             {
@@ -169,8 +181,10 @@ namespace CiotNet.Tests.Infrastructure.Serial
             MessageDto? result = null;
             bool callbackExecuted = false;
             var callbackCompleted = new ManualResetEvent(false);
-            var data = new byte[] { (byte)'{', 0x02, 0x00, 0x01, 0x04, (byte)'}' };
+            var data = new byte[] { (byte)'{', 0x03, 0x00, 0x04, 0x01, 0x00, (byte)'}' };
             var args = new object[] { connectionMock.Object, data };
+
+            //serializerMock.Setup(e => e.Deserialize<MessageDto>(MessageDtoMocks.MockData, 3)).Returns(MessageDtoMocks.Mock);
 
             protocol.OnMessage += (s, e) =>
             {
@@ -185,8 +199,11 @@ namespace CiotNet.Tests.Infrastructure.Serial
 
             if (callbackExecuted)
             {
-                Assert.That(result?.Interface, Is.EqualTo(InterfaceType.System));
-                Assert.That(result?.Type, Is.EqualTo(MessageType.GetStatus));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result?.Interface.Type, Is.EqualTo(InterfaceType.System));
+                    Assert.That(result?.Type, Is.EqualTo(MessageType.GetStatus));
+                });
             }
             else
             {
