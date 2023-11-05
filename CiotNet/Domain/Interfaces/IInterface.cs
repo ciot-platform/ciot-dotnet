@@ -1,20 +1,17 @@
 ﻿using CiotNetNS.Application.DTOs;
-using CiotNetNS.Domain.Enums;
+using CiotNetNS.Application.DTOs.Interface;
+using CiotNetNS.Application.DTOs.System;
 using System;
 
 namespace CiotNetNS.Domain.Interfaces
 {
-    public interface IInterface <ConfigType, StatusType, RequestType>
+    public interface IInterface
     {
         event EventHandler<InterfaceEvent> InterfaceEvent;
 
-        ConfigType Config { get; }
-        StatusType Status { get; }
-
-        ErrorCode Start(ConfigType config);
         ErrorCode Stop();
-        ErrorCode ProcessRequest(RequestType request);
         ErrorCode ProcessMessage(MessageDto message);
         ErrorCode SendData(byte[] data);
+        ErrorCode SendMessage(MessageDto message);
     }
 }

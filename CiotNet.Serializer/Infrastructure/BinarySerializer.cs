@@ -71,11 +71,6 @@ namespace CiotNet.Serializer.Infrastructure
                 }
                 return bytes.ToArray();
             }
-            //else if (type == typeof(ISerializable))
-            //{
-            //    ISerializable serializable = (ISerializable)value;
-            //    return serializable.Serialize(this);
-            //}
             else if (typeof(IUnion).IsAssignableFrom(type))
             {
                 var obj = value as IUnion;
@@ -170,12 +165,6 @@ namespace CiotNet.Serializer.Infrastructure
                 idx++;
                 return text;
             }
-
-            //if (type == typeof(ISerializable))
-            //{
-            //    var obj = Activator.CreateInstance(type) as ISerializable;
-            //    return obj.Deserialize(this, data, idx);
-            //}
 
             if (typeof(IUnion).IsAssignableFrom(type))
             {

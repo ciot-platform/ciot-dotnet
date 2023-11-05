@@ -11,6 +11,8 @@ namespace CiotNetNS.Domain.Abstractions
 
         public string Port { get => serial.PortName; set => serial.PortName = value; }
 
+        public int BaudRate { get => serial.BaudRate; set => serial.BaudRate = value; }
+
         public bool IsOpen => serial?.IsOpen ?? false;
 
         public SerialAdapter(SerialPort serial)

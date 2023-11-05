@@ -11,9 +11,5 @@ namespace CiotNet.Serializer.Domain.Interfaces
         void SetData(byte[] data);
 
         byte[] GetData();
-
-        T Get<T>();
-
-        void Set<T>(T data);
     }
 }

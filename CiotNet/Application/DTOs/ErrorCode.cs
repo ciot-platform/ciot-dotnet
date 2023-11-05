@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CiotNetNS.Domain.Enums
+namespace CiotNetNS.Application.DTOs
 {
     public enum ErrorCode
     {
@@ -11,7 +11,7 @@ namespace CiotNetNS.Domain.Enums
         NullArg,
         InvalidId,
         InvalidType,
-        BufferOverflow,
+        Overflow,
         NotImplemented,
         NotSupported,
         Busy,
@@ -21,12 +21,14 @@ namespace CiotNetNS.Domain.Enums
         SendDataError,
         ReceiveDataError,
         InvalidSize,
-        SerialPortClosed,
+        Closed,
         NotFound,
         ValidationFailed,
         ConnectError,
         DisconnectError,
         Exception,
-        TerminatorMissing
+        TerminatorMissing,
+        InvalidArg,
+        NoMemory
     }
 }

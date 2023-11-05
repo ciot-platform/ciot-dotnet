@@ -1,4 +1,4 @@
-﻿using CiotNetNS.Domain.Enums;
+﻿using CiotNetNS.Application.DTOs;
 
 namespace CiotNetNS.Shared
 {

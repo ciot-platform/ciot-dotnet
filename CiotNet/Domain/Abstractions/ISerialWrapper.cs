@@ -6,6 +6,7 @@ namespace CiotNetNS.Domain.Abstractions
     {
         event EventHandler<byte[]> DataReceived;
         string Port { get; set; }
+        int BaudRate { get; set; }
         bool IsOpen { get; }
         void Open();
         void Close();

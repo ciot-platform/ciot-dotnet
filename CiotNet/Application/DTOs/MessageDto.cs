@@ -1,9 +1,33 @@
-﻿using CiotNet.Serializer.Domain.Interfaces;
-using CiotNet.Serializer.Infrastructure;
-using CiotNetNS.Domain.Enums;
+﻿using CiotNet.Serializer.Infrastructure;
+using CiotNetNS.Application.DTOs.Interface;
+using CiotNetNS.Application.DTOs.Uart;
 
 namespace CiotNetNS.Application.DTOs
 {
+    public enum MessageType
+    {
+        Unknown,
+        Start,
+        Stop,
+        GetConfig,
+        GetStatus,
+        Request,
+        Event
+    }
+
+    public interface IMessageData { }
+
+    public interface IMessageConfig : IMessageData{ }
+
+    public interface IMessageStatus : IMessageData { }
+
+    public interface IMessageRequest : IMessageData { }
+
+    public class MessageData : Union<IMessageData>
+    {
+        public UartDataDto Uart { get => Get<UartDataDto>(); set => Set(value); }
+    }
+
     public class MessageDto
     {
         public MessageType Type { get; set; }
@@ -12,19 +36,14 @@ namespace CiotNetNS.Application.DTOs
 
         public ErrorCode Error { get; set; }
 
-        public Union Data { get; set; }
+        public MessageData Data { get; set; }
 
-        public MessageDto(MessageType messageType = MessageType.Unknown, InterfaceType interfaceType = InterfaceType.Unknown, byte interfaceId = 0, Union data = null)
+        public MessageDto() 
         {
-            Type = messageType;
-            Interface = new InterfaceInfoDto(interfaceType, interfaceId);
+            Type = MessageType.Unknown;
+            Interface = new InterfaceInfoDto();
             Error = ErrorCode.Ok;
-            Data = data;
-        }
-
-        public static MessageDto Deserialize(ISerializer serializer, byte[] data, int offset = 0)
-        {
-            return serializer.Deserialize<MessageDto>(data, offset);
+            Data = new MessageData();
         }
     }
 }
